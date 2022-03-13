@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block head %}
+
+<title>Index</title>
+
+{% endblock %}
+{{output_table}}
+{% block body %} 
+<table class="table">
+    <tbody>
+    {% for row in range(6) %}
+      <tr>
+        {% for column in range(5) %}
+        <td style="background-color: {{output_table[row][column][0]}} ; height: 20px ;width: 20px; margin: 2px; text-align: center;">{{output_table[row][column][1]}}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}  
+      
+    </tbody>
+  </table>
+{% endblock %}
