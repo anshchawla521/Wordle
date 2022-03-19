@@ -15,6 +15,14 @@ for x in range(6): # 6 rows
     output_table.append([('grey',' ') for _ in range(5)])
 
 word_expect = data_base[random.randint(0,len(data_base)-1)] # generate random word
+
+word_expect_freq = {}
+for i in range(5):
+    if not word_expect[i] in word_expect_freq:
+        word_expect_freq[word_expect[i]] = 1
+    else:
+        word_expect_freq[word_expect[i]] = word_expect_freq[word_expect[i]] + 1
+
 def check_word(**kwargs):
     input_user_list = list(kwargs['user_input'])   #make a list of letter of word that was input
 
@@ -32,11 +40,15 @@ def check_word(**kwargs):
             if letter in word_expect: # check if letter was present in the word of the day
                 if kwargs['user_input'][Index] == word_expect[Index]: #check if the letter was present at correct index
                     is_letter_present[str(Index)] = 'green' , letter
+                    word_expect_freq[letter] = word_expect_freq[letter] - 1
                     count = count + 1
-                elif letter in word_expect:
+                elif (word_expect_freq[letter] > 0):
                     is_letter_present[str(Index)] = 'yellow' , letter
+                    word_expect_freq[letter] = word_expect_freq[letter] - 1
                 else:
-                    is_letter_present[str(Index)] = 'grey' , letter
+                    is_letter_present[str(Index)] = 'grey' , letter  
+            else:
+                is_letter_present[str(Index)] = 'grey' , letter
 
                         
         # for Index,letter in enumerate(input_user_list):
@@ -50,6 +62,7 @@ def check_word(**kwargs):
         return -1
 
 def play_game():
+    print(word_expect)
     for attempt_no in range(0,6): 
         repeat = True
         count = 0
@@ -57,8 +70,8 @@ def play_game():
             repeat = False # so that while loop runs only once untill repeat is set to true
             user_input=''  
             while len(user_input) != 5:
-                user_input = input("enter five letter word ")
-            count = check_word(user_input = user_input,word_expect = word_expect , attempt_no = attempt_no)
+                user_input = input("enter five letter word")
+            count = check_word(user_input = user_input,word_expect = word_expect , word_expect_freq = word_expect_freq , attempt_no = attempt_no)
             if count == -1:
                 repeat = True # take user input again
         if count == 5:
